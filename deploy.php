@@ -36,11 +36,14 @@ host('production')
     ->set('ssh_args', ['-o StrictHostKeyChecking=no', '-o UserKnownHostsFile=/dev/null']);
 
 task('deploy:secrets', function () {
+
     $envContent = file_get_contents('.env');
+    
+    $encoded = base64_encode($envContent);
+
     run('mkdir -p {{deploy_path}}/shared');
-    run("cat > {{deploy_path}}/shared/.env <<'EOF'
-$envContent
-EOF");
+
+    run("echo '$encoded' | base64 -d > {{deploy_path}}/shared/.env");
 });
 
 task('deploy', [
