@@ -31,7 +31,9 @@ host('production')
     ->set('remote_user', 'fascilit')
     ->set('port', 45022)
     ->set('branch', 'main')
-    ->set('deploy_path', '/home/fascilit/public_html');
+    ->set('deploy_path', '/home/fascilit/public_html')
+    ->set('ssh_multiplexing', false)
+    ->set('ssh_args', ['-o StrictHostKeyChecking=no', '-o UserKnownHostsFile=/dev/null']);
 
 task('deploy:secrets', function () {
     upload('.env', get('deploy_path') . '/shared/.env');
